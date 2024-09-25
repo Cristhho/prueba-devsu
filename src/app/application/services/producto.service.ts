@@ -1,28 +1,33 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable,  } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 import { MapeoProducto } from '../mapeadores/mapeo-producto';
 import { ID, Producto, RepositorioBase } from '@app/domain';
 import { RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app/domain/dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductoService implements RepositorioBase<Producto> {
   private readonly url = '/bp/products';
+  private productosSubject: BehaviorSubject<Array<Producto>>;
 
   constructor(
     private readonly http: HttpClient,
     private readonly mapeo: MapeoProducto
-  ) { }
+  ) {
+    const vacio: Array<Producto> = [];
+    this.productosSubject = new BehaviorSubject(vacio);
+  }
 
   obtener(): Observable<Producto[]> {
     return this.http.get<RespuestaProducto>(this.url).pipe(
       map((respuesta) => {
         const productos = respuesta.data ?? [];
         return productos.map((p) => this.mapeo.dtoModelo(p))
-      })
+      }),
+      tap((productos) => this.productosSubject.next(productos))
     );
   }
 
@@ -44,5 +49,12 @@ export class ProductoService implements RepositorioBase<Producto> {
     return this.http.delete<RespuestaBase<void>>(`${this.url}/${id}`).pipe(
       map((respuesta) => respuesta.message!)
     )
+  }
+
+  buscar(busqueda: string) {
+    busqueda = busqueda.toLowerCase();
+    return this.productosSubject.asObservable().pipe(
+      map((productos) => productos.filter((p) => p.nombre.toLowerCase().includes(busqueda)))
+    );
   }
 }

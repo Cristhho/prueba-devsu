@@ -1,4 +1,7 @@
 <div class="acciones">
-  <div class="buscador"></div>
+  <div class="buscador">
+    <app-input-text inputId="buscar" placeholder="Buscar..." [formControl]="busqueda" />
+  </div>
   <app-boton label="Agregar" />
 </div>
+<app-tabla-productos [busqueda]="busqueda.value ?? ''" />

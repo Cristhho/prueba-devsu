@@ -6,11 +6,10 @@ import { BaseInputComponent } from '../base-input.component';
 import { BlurHandler } from '@app/domain';
 import { FormInputErrorDirective } from '@app/infrastructure/directives/form-input-error.directive';
 
-type IconPosition = 'left' | 'right';
 type InputType = 'text' | 'url' | 'email' | 'tel';
 
 @Component({
-  selector: 'core-input-text',
+  selector: 'app-input-text',
   standalone: true,
   imports: [CommonModule, FormInputErrorDirective],
   templateUrl: './input-text.component.html',
@@ -26,12 +25,6 @@ export class InputTextComponent
   extends BaseInputComponent
   implements BlurHandler
 {
-  @Input()
-  iconPos?: IconPosition;
-
-  @Input()
-  icon: string = '';
-
   @Input()
   inputType: InputType = 'text';
 

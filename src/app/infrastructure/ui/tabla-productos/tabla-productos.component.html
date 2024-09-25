@@ -1,0 +1,35 @@
+<div class="contenedor">
+  @if (productos$ | async; as productos) {
+    <div [ngStyle]="{'overflow-x': 'auto'}">
+      <table>
+        <thead>
+          <tr>
+            <th [ngStyle]="{width: '100px', textAlign: 'center'}">Logo</th>
+            <th>Nombre del producto</th>
+            <th>Descripción</th>
+            <th>Fecha de liberación</th>
+            <th>Fecha de reestructuración</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (producto of (productosFiltrados$ | async); track producto.id) {
+            <tr>
+              <td [ngStyle]="{textAlign: 'center'}"><img [ngSrc]="producto.logo" width="50" height="50"></td>
+              <td>{{producto.nombre}}</td>
+              <td>{{producto.descripcion}}</td>
+              <td>{{producto.fechaLiberacion | date: 'dd-MM-yyyy':'GMT'}}</td>
+              <td>{{producto.fechaRevision | date: 'dd-MM-yyyy':'GMT'}}</td>
+              <td></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    @if (productosFiltrados$ | async; as resultados) {
+      <div class="pie-tabla">
+        {{resultados?.length}} resultado{{resultados?.length === 1 ? '' : 's'}}
+      </div>
+    }
+  }
+</div>

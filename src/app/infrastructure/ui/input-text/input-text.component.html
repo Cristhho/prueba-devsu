@@ -2,26 +2,17 @@
   <label
     class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
     [for]="inputId"
-    [ngClass]="{
-      'text-red-600 dark:text-red-500': isInvalid
-    }"
+    [ngStyle]="isInvalid ? {
+      'color': '#dd0031'
+    } : {}"
     >{{ label }}</label
   >
 }
 <div>
   <span
     class="block w-full"
-    [ngClass]="{
-      'p-input-icon-left': iconPos === 'left',
-      'p-input-icon-right': iconPos === 'right'
-    }"
     coreFormInputError
     [inputControl]="formControl">
-    <i
-      [class]="icon"
-      [ngClass]="{
-        'text-red-600 dark:text-red-500': isInvalid
-      }"></i>
     <input
       class="block w-full"
       [ngClass]="errorClass"

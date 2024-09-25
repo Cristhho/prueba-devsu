@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  margin-top: 2rem;
+}
+.contenedor {
+  background-color: #ffffff;
+  padding: 1rem;
+}
+.pie-tabla {
+  margin-top: 2rem;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  background-color: #ffffff;
+}
+thead {
+  background-color: #f9fafc;
+}
+th, td {
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+th {
+  padding: 1.5em 1em;
+  min-width: 150px;
+}
+td {
+  padding: .3em 1em;
+}
+td img {
+  object-fit: cover;
+  border-radius: 50%;
+}
