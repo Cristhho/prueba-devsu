@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+button {
+  background-color: var(--color-secundario);
+  border: none;
+  font-size: .8rem;
+  padding: 1.5em;
+}
