@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { ValidationErrorService } from '../services/validation-error.service';
+import { ValidationErrorService } from '../../application/services/validation-error.service';
 
 /**
  * Apply to an input and shows the first form control error message,
