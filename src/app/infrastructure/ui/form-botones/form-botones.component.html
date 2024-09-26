@@ -1,0 +1,6 @@
+<div class="crearBotones">
+  @if (!editando) {
+    <app-boton label="Reiniciar" tipo="button" variante="secundario" (btnClick)="reiniciarFormulario()"/>
+  }
+  <app-boton [label]="editando ? 'Actualizar' : 'Enviar'" [disabled]="(cargando$ | async) ?? false" (btnClick)="editando ? actualizar() : guardar()"/>
+</div>

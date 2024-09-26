@@ -20,7 +20,7 @@
               <td>{{producto.descripcion}}</td>
               <td>{{producto.fechaLiberacion | date: 'dd-MM-yyyy':'GMT'}}</td>
               <td>{{producto.fechaRevision | date: 'dd-MM-yyyy':'GMT'}}</td>
-              <td></td>
+              <td><app-menu-container [id]="producto.id" /></td>
             </tr>
           }
         </tbody>

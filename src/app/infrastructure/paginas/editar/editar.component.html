@@ -1,0 +1,11 @@
+<app-boton-atras />
+<div class="crear">
+  <h1 class="crearTitulo">Editar producto</h1>
+  @if (producto$ | async;) {
+    <div class="crearContenedor">
+      <app-form-producto [editando]="true" />
+    </div>
+    <app-form-botones [revision]="revision" [editando]="true" [id]="id" />
+  }
+</div>
+

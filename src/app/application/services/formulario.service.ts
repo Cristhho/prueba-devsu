@@ -15,7 +15,7 @@ export class FormularioService {
 
   constructor(private readonly fb: FormBuilder) { }
 
-  public construirFormulario() {
+  public construirFormulario(editando: boolean = false) {
     this.formularioCrear = this.fb.group({
       descripcion: new FormControl('', {
         nonNullable: true,
@@ -28,7 +28,7 @@ export class FormularioService {
       id: new FormControl('', {
         nonNullable: true,
         validators: [Validators.minLength(3), Validators.maxLength(10), Validators.required],
-        asyncValidators: [idValidator()]
+        asyncValidators: editando ? [] : [idValidator()]
       }),
       logo: new FormControl('', {
         nonNullable: true,

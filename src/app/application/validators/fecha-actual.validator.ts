@@ -12,7 +12,6 @@ export function fechaActualValidator(): ValidatorFn {
       fecha.setHours(23);
       fecha.setMinutes(59);
       fecha.setSeconds(59);
-      console.log(fecha.getTime(), hoy.getTime());
       return fecha.getTime() < (hoy.getTime() - (1000 * 1)) ? { fecha: true } : null;
     } catch (errr) {
       return { fecha: true };

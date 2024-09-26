@@ -4,14 +4,16 @@ import { Observable } from 'rxjs';
 
 import { ProductoService } from '@app/application/services/producto.service';
 import { Producto } from '@app/domain';
+import { MenuContainerComponent } from "../menu-container/menu-container.component";
 
 @Component({
   selector: 'app-tabla-productos',
   standalone: true,
   imports: [
     CommonModule,
-    NgOptimizedImage
-  ],
+    NgOptimizedImage,
+    MenuContainerComponent
+],
   templateUrl: './tabla-productos.component.html',
   styleUrl: './tabla-productos.component.css'
 })

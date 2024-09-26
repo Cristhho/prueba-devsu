@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+@media screen and (min-width: 64em) {
+  form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .crearInput {
+    width: 48%;
+  }
+}

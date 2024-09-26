@@ -1,0 +1,13 @@
+<div class="menuContenedor" (click)="mostrarMenuContextual($event)">
+  <span>.</span>
+  <span>.</span>
+  <span>.</span>
+</div>
+@if (menuItems.length > 0 && mostrarMenu) {
+  <app-context-menu
+  [ngStyle]="menuStyle()"
+  [contextMenuItems]="menuItems"
+  (onContextMenuItemClick)="handleMenuItemClick($event)"
+  ></app-context-menu>
+  <div class="overlay" (click)="overlayClick()"></div>
+}

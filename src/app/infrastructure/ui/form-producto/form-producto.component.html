@@ -1,0 +1,41 @@
+<form [formGroup]="formulario">
+  <div class="crearInput">
+    <app-input-text
+      inputId="id"
+      label="ID"
+      inputType="text"
+      formControlName="id" />
+  </div>
+  <div class="crearInput">
+    <app-input-text
+      inputId="nombre"
+      label="Nombre"
+      inputType="text"
+      formControlName="nombre" />
+  </div>
+  <div class="crearInput">
+    <app-input-text
+      inputId="desc"
+      label="Descripción"
+      inputType="text"
+      formControlName="descripcion" />
+  </div>
+  <div class="crearInput">
+    <app-input-text
+      inputId="logo"
+      label="Logo"
+      inputType="url"
+      formControlName="logo" />
+  </div>
+  <div class="crearInput">
+    <app-input-text
+      inputId="liberacion"
+      label="Fecha liberación"
+      inputType="date"
+      formControlName="fechaLiberacion" />
+  </div>
+  <div class="crearInput">
+    <label class="disabled">Fecha revisión</label>
+    <input type="text" [disabled]="true" [value]="revision()" />
+  </div>
+</form>

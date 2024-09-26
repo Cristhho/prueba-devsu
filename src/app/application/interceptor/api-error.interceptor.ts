@@ -14,7 +14,7 @@ export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
       });
       else
         toastService.add({
-          message: `Código de error: ${err.status}, ${JSON.stringify(err.error)}`,
+          message: `Código de error: ${err.status}, ${err.error.message}`,
           type: 'error',
           duration: 7000
         });
