@@ -3,7 +3,7 @@ import { PreloadAllModules, provideRouter, withPreloading } from '@angular/route
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { apiUrlInterceptor } from './application/interceptor';
+import { apiErrorInterceptor, apiUrlInterceptor } from './application/interceptor';
 import { MapeoProducto } from './application/mapeadores/mapeo-producto';
 
 export const appConfig: ApplicationConfig = {
@@ -11,6 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(PreloadAllModules),),
     provideHttpClient(withInterceptors([
       apiUrlInterceptor,
+      apiErrorInterceptor
     ])),
     MapeoProducto
   ]

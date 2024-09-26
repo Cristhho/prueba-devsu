@@ -7,13 +7,19 @@
   --color-primario: #0f265c;
   --color-secundario: #f5df66;
   --color-fondo: #f4f6f9;
+  --fondo-verde: #eaf8f3;
+  --exitoso: #45b893;
+  --fondo-rojo: #fef2f2;
+  --error: #dc2626;
   font-family: "Open Sans", sans-serif;
 }
 
 body {
   height: 100vh;
 }
-
+a {
+  cursor: pointer;
+}
 input {
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -23,4 +29,38 @@ input {
 input:focus {
   border-width: 1px;
   border-color: var(--color-primario);
+}
+
+.errorMensaje {
+  display: block;
+  margin-top: .5rem;
+  font-size: .8rem;
+  color: var(--error);
+}
+.inputError {
+  border-color: #f87171;
+}
+
+label {
+  margin-bottom: .5rem;
+  display: block;
+  font-size: .8rem;
+}
+.input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: .5rem;
+}
+.inputContenedor {
+  display: block;
+}
+input {
+  width: 100%;
+}
+input:disabled, .disabled {
+  color: #cacacb;
+  pointer-events: none;
+}
+input:disabled {
+  background-color: #f6f6f6;
 }

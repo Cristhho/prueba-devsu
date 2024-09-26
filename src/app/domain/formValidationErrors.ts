@@ -5,3 +5,4 @@ export const MIN = 'Valor debe ser mayor o igual a ';
 export const MAX = 'Valor debe ser menor o igual a ';
 export const EMAIL = 'El valor debe ser un correo válido';
 export const URL = 'El valor debe ser una url válida';
+export const DATE = 'La fecha no puede ser antes de hoy';

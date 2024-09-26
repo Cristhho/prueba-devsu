@@ -1,1 +1,6 @@
-<button [type]="tipo" (click)="onClick()">{{label}}</button>
+<button
+  [disabled]="disabled"
+  [ngClass]="variante"
+  [type]="tipo"
+  (click)="onClick()"
+>{{label}}</button>

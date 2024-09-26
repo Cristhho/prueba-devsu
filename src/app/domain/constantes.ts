@@ -1,1 +1,1 @@
-export const classError = "";
+export const classError = "inputError";

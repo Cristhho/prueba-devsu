@@ -2,6 +2,6 @@
   <div class="buscador">
     <app-input-text inputId="buscar" placeholder="Buscar..." [formControl]="busqueda" />
   </div>
-  <app-boton label="Agregar" />
+  <app-boton label="Agregar" (btnClick)="onCrearClick()" />
 </div>
 <app-tabla-productos [busqueda]="busqueda.value ?? ''" />

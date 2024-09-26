@@ -11,6 +11,11 @@ export const routes: Routes = [
         loadComponent: async () => (await import('@app/infrastructure/paginas')).InicioComponent,
         path: '',
         pathMatch: 'full',
+      },
+      {
+        loadComponent: async () => (await import('@app/infrastructure/paginas')).CrearComponent,
+        path: 'crear',
+        pathMatch: 'full',
       }
     ],
   },

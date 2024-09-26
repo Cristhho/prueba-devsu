@@ -7,4 +7,11 @@ button {
   border: none;
   font-size: .8rem;
   padding: 1.5em;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+button.secundario {
+  background-color: #eaecf2;
+  color: #414f79;
 }

@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+.atras {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  font-size: 1.3rem;
+  line-height: 32px;
+  background-color: var(--color-primario);
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+  font-weight: 700;
+  transform: translateY(-2rem);
+}

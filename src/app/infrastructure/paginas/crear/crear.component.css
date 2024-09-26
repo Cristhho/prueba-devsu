@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+.crear {
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+.crearContenedor {
+  padding: 1rem 4rem 2rem;
+}
+.crearContenedor form {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+.crearTitulo {
+  color: var(--color-primario);
+  text-align: center;
+  border-bottom: 1px solid var(--color-primario);
+  padding: 2rem 0;
+  margin: 0;
+}
+.crearBotones {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+@media screen and (min-width: 64em) {
+  .crearContenedor form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .crearInput {
+    width: 48%;
+  }
+}

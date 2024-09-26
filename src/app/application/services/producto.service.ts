@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, finalize, map, Observable, tap } from 'rxjs';
 
 import { MapeoProducto } from '../mapeadores/mapeo-producto';
 import { ID, Producto, RepositorioBase } from '@app/domain';
 import { RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app/domain/dto';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +13,24 @@ import { RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app
 export class ProductoService implements RepositorioBase<Producto> {
   private readonly url = '/bp/products';
   private productosSubject: BehaviorSubject<Array<Producto>>;
+  private cargandoSubject = new BehaviorSubject<boolean>(false);
+  cargando$ = this.cargandoSubject.asObservable();
 
   constructor(
     private readonly http: HttpClient,
-    private readonly mapeo: MapeoProducto
+    private readonly mapeo: MapeoProducto,
+    private readonly toast: ToastService
   ) {
     const vacio: Array<Producto> = [];
     this.productosSubject = new BehaviorSubject(vacio);
+  }
+
+  mostarCarga() {
+    this.cargandoSubject.next(true);
+  }
+
+  esconderCarga() {
+    this.cargandoSubject.next(false);
   }
 
   obtener(): Observable<Producto[]> {
@@ -33,8 +45,14 @@ export class ProductoService implements RepositorioBase<Producto> {
 
   guardar(datos: Producto): Observable<string> {
     const cuerpo = this.mapeo.modeloDto(datos);
+    this.mostarCarga();
     return this.http.post<RespuestaGuardarProducto>(this.url, cuerpo).pipe(
-      map((respuesta) => respuesta.message ?? '')
+      map((respuesta) => respuesta.message ?? ''),
+      tap((respuesta) => this.toast.add({
+        message: respuesta,
+        type: 'success'
+      })),
+      finalize(() => this.esconderCarga())
     );
   }
 
@@ -56,5 +74,9 @@ export class ProductoService implements RepositorioBase<Producto> {
     return this.productosSubject.asObservable().pipe(
       map((productos) => productos.filter((p) => p.nombre.toLowerCase().includes(busqueda)))
     );
+  }
+
+  verificarId(id: ID) {
+    return this.http.get<boolean>(`${this.url}/verification/${id}`)
   }
 }

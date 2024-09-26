@@ -29,7 +29,7 @@ export class FormInputErrorDirective implements OnInit {
   ) {
     this.errorContainer = document.createElement('span');
     this.errorContainer.classList.add(
-      ...'block w-full mt-2 text-sm text-red-600 dark:text-red-500 font-medium'.split(
+      ...'errorMensaje'.split(
         ' '
       )
     );

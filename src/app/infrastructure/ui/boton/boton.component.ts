@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+type Variante = "primario" | "secundario";
+
 @Component({
   selector: 'app-boton',
   standalone: true,
@@ -20,11 +22,18 @@ export class BotonComponent {
   @Input()
   class: string = '';
 
+  @Input()
+  variante: Variante = 'primario';
+
+  @Input()
+  disabled: boolean = false;
+
   @Output()
   btnClick = new EventEmitter<void>();
 
   onClick() {
-    this.btnClick.emit();
+    if (!this.disabled)
+      this.btnClick.emit();
   }
 }
 

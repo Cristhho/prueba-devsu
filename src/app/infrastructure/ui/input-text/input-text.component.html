@@ -1,6 +1,5 @@
 @if (label) {
   <label
-    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
     [for]="inputId"
     [ngStyle]="isInvalid ? {
       'color': '#dd0031'
@@ -8,21 +7,19 @@
     >{{ label }}</label
   >
 }
-<div>
+<div class="input">
   <span
-    class="block w-full"
+    class="inputContenedor"
     coreFormInputError
     [inputControl]="formControl">
     <input
-      class="block w-full"
       [ngClass]="errorClass"
       [id]="inputId"
       [type]="inputType"
       [placeholder]="placeholder"
       [disabled]="disabled"
-      [value]="value"
       (input)="onChangeHandler($event)"
       (blur)="onBlurHandler()"
-      pInputText />
+      #inputRef />
   </span>
 </div>

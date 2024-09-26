@@ -1,0 +1,7 @@
+@if (toasts.length > 0) {
+  <div class="toastContainer">
+    @for (toast of toasts; track i; let i = $index) {
+      <app-toast-item [mensaje]="toast.message" [tipo]="toast.type" [toastkey]="i"></app-toast-item>
+    }
+  </div>
+}
