@@ -1,4 +1,4 @@
-<div class="contenedor">
+<div class="tablaContenedor">
   @if (productos$ | async; as productos) {
     <div [ngStyle]="{'overflow-x': 'auto'}">
       <table>
@@ -20,14 +20,17 @@
               <td>{{producto.descripcion}}</td>
               <td>{{producto.fechaLiberacion | date: 'dd-MM-yyyy':'GMT'}}</td>
               <td>{{producto.fechaRevision | date: 'dd-MM-yyyy':'GMT'}}</td>
-              <td><app-menu-container [id]="producto.id" /></td>
+              <td><app-menu-container [producto]="producto" /></td>
             </tr>
           }
         </tbody>
       </table>
     </div>
     @if (productosFiltrados$ | async; as resultados) {
-      <div class="pie-tabla">
+      @if (!resultados?.length) {
+        <div class="tabla--vacio"><span>No existen productos</span></div>
+      }
+      <div class="tablaPie">
         {{resultados?.length}} resultado{{resultados?.length === 1 ? '' : 's'}}
       </div>
     }

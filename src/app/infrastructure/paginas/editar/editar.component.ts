@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BotonAtrasComponent } from "../../ui/boton-atras/boton-atras.component";
@@ -23,7 +23,7 @@ import { FechasUtils } from '@app/utils/fechas';
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.css',
 })
-export class EditarComponent implements OnInit {
+export class EditarComponent implements OnInit, AfterContentChecked {
   @ViewChild(FormProductoComponent)
   private formRef!: FormProductoComponent;
 
@@ -38,6 +38,7 @@ export class EditarComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly changeDetector: ChangeDetectorRef,
     private readonly formularioService: FormularioService,
     private readonly productoService: ProductoService
   ) {
@@ -64,6 +65,10 @@ export class EditarComponent implements OnInit {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 }
 

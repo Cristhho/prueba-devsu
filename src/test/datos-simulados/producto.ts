@@ -6,7 +6,7 @@ export const producto: Producto = {
   fechaLiberacion: new Date('2024-01-01'),
   fechaRevision: new Date('2025-01-01'),
   id: '123',
-  logo: 'logo.png',
+  logo: 'http://dominio.com/logo.png',
   nombre: 'producto'
 };
 
@@ -15,6 +15,6 @@ export const productoDto: ProductoDto = {
   date_revision: '2025-01-01',
   description: '',
   id: '123',
-  logo: 'logo.png',
+  logo: 'http://dominio.com/logo.png',
   name: 'producto'
 };

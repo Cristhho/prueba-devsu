@@ -2,12 +2,16 @@
   display: block;
   margin-top: 2rem;
 }
-.contenedor {
+.tablaContenedor {
   background-color: #ffffff;
   padding: 1rem;
 }
-.pie-tabla {
+.tablaPie {
   margin-top: 2rem;
+}
+.tabla--vacio {
+  text-align: center;
+  padding: 1rem 0;
 }
 table {
   border-collapse: collapse;

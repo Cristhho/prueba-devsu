@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+.botones {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 1rem 0;
+}

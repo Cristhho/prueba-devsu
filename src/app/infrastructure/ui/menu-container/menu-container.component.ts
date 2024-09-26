@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ContextMenuModel, ID, MenuEventType } from '@app/domain';
+import { ContextMenuModel, ID, MenuEventType, Producto } from '@app/domain';
 import { ContextMenuComponent } from "../context-menu/context-menu.component";
+import { ModalService } from '@app/application/services/modal.service';
+import { ModalEliminarComponent } from '../modal-eliminar/modal-eliminar.component';
 
 @Component({
   selector: 'app-menu-container',
@@ -17,7 +19,7 @@ import { ContextMenuComponent } from "../context-menu/context-menu.component";
 })
 export class MenuContainerComponent {
   @Input()
-  id: ID = '';
+  producto!: Producto;
 
   mostrarMenu: boolean;
   menuItems: Array<ContextMenuModel> = [];
@@ -26,6 +28,7 @@ export class MenuContainerComponent {
 
   constructor(
     private readonly router: Router,
+    private modalService: ModalService,
   ) {
     this.mostrarMenu = false;
     this.menuItems = [
@@ -61,10 +64,19 @@ export class MenuContainerComponent {
     this.mostrarMenu = false;
     switch (event.data) {
       case this.menuItems[0].menuEvent:
-        this.router.navigate(['/', this.id]);
+        this.router.navigate(['/', this.producto.id]);
         break;
       case this.menuItems[1].menuEvent:
-          console.log('To handle formatting');
+        this.modalService.open(ModalEliminarComponent, {
+          size: {
+            width: '40rem',
+          },
+          inputs: {
+            id: this.producto.id,
+            nombre: this.producto.nombre,
+          },
+        });
+        break;
     }
   }
 

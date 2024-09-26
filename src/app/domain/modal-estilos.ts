@@ -1,4 +1,5 @@
-export interface ModalEstilos {
+export type ComponentInputs = Record<string, any>;
+export interface ModalProps {
   size?: {
     minWidth?: string;
     width?: string;
@@ -7,4 +8,5 @@ export interface ModalEstilos {
     height?: string;
     maxHeight?: string;
   };
+  inputs?: ComponentInputs;
 }

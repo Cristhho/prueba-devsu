@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 
 import { ModalService } from '@app/application/services/modal.service';
-import { ModalEstilos } from '@app/domain';
+import { ModalProps } from '@app/domain';
 
 @Component({
   selector: 'app-modal',
@@ -11,7 +11,7 @@ import { ModalEstilos } from '@app/domain';
 })
 export class ModalComponent implements AfterViewInit {
   @ViewChild('modal') modal!: ElementRef<HTMLDivElement>;
-  options!: ModalEstilos | undefined;
+  options!: ModalProps | undefined;
 
   constructor(
     private modalService: ModalService,

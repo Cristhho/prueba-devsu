@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ProductoService } from '@app/application/services/producto.service';
@@ -17,15 +17,19 @@ import { MenuContainerComponent } from "../menu-container/menu-container.compone
   templateUrl: './tabla-productos.component.html',
   styleUrl: './tabla-productos.component.css'
 })
-export class TablaProductosComponent implements OnChanges {
+export class TablaProductosComponent implements OnInit, OnChanges {
   @Input({ required: true })
   busqueda = '';
 
-  public productos$: Observable<Producto[]>;
-  public productosFiltrados$: Observable<Producto[]> = this.servicio.buscar('');
+  public productos$!: Observable<Producto[]>;
+  public productosFiltrados$!: Observable<Producto[]>;
 
   constructor(private readonly servicio: ProductoService){
+  }
+
+  ngOnInit(): void {
     this.productos$ = this.servicio.obtener();
+    this.productosFiltrados$ = this.servicio.buscar('');
   }
 
   ngOnChanges(changes: SimpleChanges): void {

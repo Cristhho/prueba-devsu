@@ -7,7 +7,6 @@ import { InputTextComponent } from '../input-text/input-text.component';
 import { FormularioService } from '@app/application/services/formulario.service';
 import { ProductoService } from '@app/application/services/producto.service';
 import { FechasUtils } from '@app/utils/fechas';
-import { Producto } from '@app/domain';
 
 @Component({
   selector: 'app-form-producto',
@@ -37,21 +36,25 @@ export class FormProductoComponent implements OnDestroy, OnInit {
     private readonly productoService: ProductoService
   ) {
     this.suscripciones.push(
-      this.formularioService.formulario.get('fechaLiberacion')!.valueChanges.subscribe((value) => {
-        if (Boolean(value)) {
-          const fecha = new Date(Date.parse(value));
-          const tiempo = new Date(fecha.getTime() + 31556952000);
-          this.revision.set(FechasUtils.formatoInput(tiempo));
-        } else {
+      this.formularioService.formulario.get('fechaLiberacion')!.valueChanges.subscribe((valor) => {
+        if (Boolean(valor)) this.calcularRevision(valor);
+        else
           this.revision.set('');
-        }
       })
     );
   }
 
+  private calcularRevision(valor: string) {
+    const fecha = new Date(Date.parse(valor));
+    const tiempo = new Date(fecha.getTime() + 31556952000);
+    this.revision.set(FechasUtils.formatoInput(tiempo));
+  }
+
   ngOnInit(): void {
-    if (this.editando)
+    if (this.editando) {
       this.formulario.get('id')?.disable();
+      this.calcularRevision(this.formulario.get('fechaLiberacion')!.value);
+    }
     else
       this.formulario.get('id')?.enable();
   }
