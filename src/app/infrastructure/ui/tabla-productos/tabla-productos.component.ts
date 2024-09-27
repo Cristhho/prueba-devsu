@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ProductoService } from '@app/application/services/producto.service';
 import { Producto } from '@app/domain';
 import { MenuContainerComponent } from "../menu-container/menu-container.component";
+import { ProgressBarComponent } from '../progress-bar/progress-bar.component';
 
 @Component({
   selector: 'app-tabla-productos',
@@ -12,7 +13,8 @@ import { MenuContainerComponent } from "../menu-container/menu-container.compone
   imports: [
     CommonModule,
     NgOptimizedImage,
-    MenuContainerComponent
+    MenuContainerComponent,
+    ProgressBarComponent
 ],
   templateUrl: './tabla-productos.component.html',
   styleUrl: './tabla-productos.component.css'
@@ -23,6 +25,10 @@ export class TablaProductosComponent implements OnInit, OnChanges {
 
   public productos$!: Observable<Producto[]>;
   public productosFiltrados$!: Observable<Producto[]>;
+
+  get cargando$() {
+    return this.servicio.cargando$;
+  }
 
   constructor(private readonly servicio: ProductoService){
   }

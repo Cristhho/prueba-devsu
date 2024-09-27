@@ -69,7 +69,8 @@ export class MenuContainerComponent {
       case this.menuItems[1].menuEvent:
         this.modalService.open(ModalEliminarComponent, {
           size: {
-            width: '40rem',
+            width: '80%',
+            maxWidth: '32rem'
           },
           inputs: {
             id: this.producto.id,

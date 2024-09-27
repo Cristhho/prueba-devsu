@@ -1,6 +1,7 @@
-<p>Se eliminará el producto: {{nombre}}</p>
-<p>¿Está seguro de continuar?</p>
+<div class="modalContenido">
+  <h2>¿Estas seguro de eliminar el producto {{nombre}}?</h2>
+</div>
 <div class="botones">
   <app-boton label="Cancelar" tipo="button" variante="secundario" (btnClick)="onClose()"/>
-  <app-boton label="Continuar" [disabled]="(cargando$ | async) ?? false" (btnClick)="eliminar()"/>
+  <app-boton label="Confirmar" [disabled]="(cargando$ | async) ?? false" (btnClick)="eliminar()"/>
 </div>

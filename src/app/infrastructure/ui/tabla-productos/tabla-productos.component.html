@@ -1,6 +1,9 @@
 <div class="tablaContenedor">
   @if (productos$ | async; as productos) {
     <div [ngStyle]="{'overflow-x': 'auto'}">
+      @if (cargando$ | async) {
+        <app-progress-bar />
+      }
       <table>
         <thead>
           <tr>

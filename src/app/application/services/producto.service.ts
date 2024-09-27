@@ -34,12 +34,14 @@ export class ProductoService implements RepositorioBase<Producto> {
   }
 
   obtener(): Observable<Producto[]> {
+    this.mostarCarga();
     return this.http.get<RespuestaProducto>(this.url).pipe(
       map((respuesta) => {
         const productos = respuesta.data ?? [];
         return productos.map((p) => this.mapeo.dtoModelo(p))
       }),
-      tap((productos) => this.productosSubject.next(productos))
+      tap((productos) => this.productosSubject.next(productos)),
+      finalize(() => this.esconderCarga())
     );
   }
 

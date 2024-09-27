@@ -5,10 +5,12 @@
 button {
   background-color: var(--color-secundario);
   border: none;
+  border-radius: .3rem;
   font-size: .8rem;
   padding: 1.5em;
   cursor: pointer;
   font-weight: 700;
+  width: 100%;
 }
 
 button.secundario {

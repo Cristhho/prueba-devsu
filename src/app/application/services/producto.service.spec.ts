@@ -15,7 +15,6 @@ describe('ProductoService', () => {
   let httpController: HttpTestingController;
 
   beforeEach(() => {
-    const serviceSpy = jasmine.createSpyObj('ProductoService', ['obtener'])
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([apiUrlInterceptor])),
