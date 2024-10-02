@@ -1,6 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
 import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAngularQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
 import { routes } from './app.routes';
 import { apiErrorInterceptor, apiUrlInterceptor } from './application/interceptor';
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
       apiUrlInterceptor,
       apiErrorInterceptor
     ])),
+    provideAngularQuery(new QueryClient()),
     MapeoProducto
   ]
 };
