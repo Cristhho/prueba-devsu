@@ -12,7 +12,6 @@ import { ToastService } from './toast.service';
 })
 export class ProductoService implements RepositorioBase<Producto> {
   private readonly url = '/bp/products';
-  private productosSubject: BehaviorSubject<Array<Producto>>;
   private cargandoSubject = new BehaviorSubject<boolean>(false);
   cargando$ = this.cargandoSubject.asObservable();
 
@@ -20,10 +19,7 @@ export class ProductoService implements RepositorioBase<Producto> {
     private readonly http: HttpClient,
     private readonly mapeo: MapeoProducto,
     private readonly toast: ToastService
-  ) {
-    const vacio: Array<Producto> = [];
-    this.productosSubject = new BehaviorSubject(vacio);
-  }
+  ) {}
 
   mostarCarga() {
     this.cargandoSubject.next(true);
@@ -34,14 +30,11 @@ export class ProductoService implements RepositorioBase<Producto> {
   }
 
   obtener(): Observable<Producto[]> {
-    this.mostarCarga();
     return this.http.get<RespuestaProducto>(this.url).pipe(
       map((respuesta) => {
         const productos = respuesta.data ?? [];
         return productos.map((p) => this.mapeo.dtoModelo(p))
       }),
-      tap((productos) => this.productosSubject.next(productos)),
-      finalize(() => this.esconderCarga())
     );
   }
 
@@ -72,13 +65,6 @@ export class ProductoService implements RepositorioBase<Producto> {
       tap(this.mostrarToastExito.bind(this)),
       finalize(() => this.esconderCarga())
     )
-  }
-
-  buscar(busqueda: string) {
-    busqueda = busqueda.toLowerCase();
-    return this.productosSubject.asObservable().pipe(
-      map((productos) => productos.filter((p) => p.nombre.toLowerCase().includes(busqueda)))
-    );
   }
 
   verificarId(id: ID) {

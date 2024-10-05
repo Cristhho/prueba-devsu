@@ -1,76 +1,88 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, flush, TestBed } from "@angular/core/testing";
+import { provideQueryClient } from "@tanstack/angular-query-experimental";
+import { By } from "@angular/platform-browser";
 
 import { TablaProductosComponent } from "./tabla-productos.component";
-import { ProductoService } from "@app/application/services/producto.service";
-import { findAllByQuery, findByQuery, getElementTextByDebug, mockObservable } from "../../../../test";
-import { By } from "@angular/platform-browser";
+import { findAllByQuery, findByQuery, getElementTextByDebug } from "../../../../test";
 import { producto } from "../../../../test/datos-simulados";
+import { ObtenerProductosUseCase } from "@app/application/useCases";
+import { Producto } from "@app/domain";
+import { crearQueryOptions, queryClient } from "../../../../test/tanstack";
 
 describe('TablaProductosComponent', () => {
   let component: TablaProductosComponent;
   let fixture: ComponentFixture<TablaProductosComponent>;
-  let productoService: jasmine.SpyObj<ProductoService>;
+  let obtenerUseCase: jasmine.SpyObj<ObtenerProductosUseCase>;
 
-  beforeEach(() => {
-    const productoServiceSpy = jasmine.createSpyObj('ProductoService', ['obtener', 'buscar']);
-    TestBed.configureTestingModule({
-      providers: [
-        { provide: ProductoService, useValue: productoServiceSpy }
-      ]
-    });
-    fixture = TestBed.createComponent(TablaProductosComponent);
-    component = fixture.componentInstance;
-    productoService = TestBed.inject(ProductoService) as jasmine.SpyObj<ProductoService>;
-  });
-
-  it('debe crear el componente', () => {
-    expect(component).toBeTruthy();
-    fixture.detectChanges();
-    expect(productoService.obtener).toHaveBeenCalled();
-  });
-
-  describe('Cuando se obtengan los productos', () => {
-    it('debe retornar un arreglo vacio', (done: DoneFn) => {
-      productoService.obtener.and.returnValue(mockObservable([]));
-      fixture.detectChanges();
-      component.productos$.subscribe((v) => {
-        expect(v.length).toEqual(0);
-        done();
+  describe('Cuando se obtenga un arreglo de productos vacio', () => {
+    beforeEach(fakeAsync(async () => {
+      const obtenerUseCaseSpy = jasmine.createSpyObj('ObtenerProductosUseCase', ['execute']);
+      obtenerUseCaseSpy.execute.and.returnValue(() => crearQueryOptions<Array<Producto>>([undefined], []));
+      TestBed.configureTestingModule({
+        providers: [
+          provideQueryClient(queryClient),
+          { provide: ObtenerProductosUseCase, useValue: obtenerUseCaseSpy },
+        ],
       });
+      fixture = TestBed.createComponent(TablaProductosComponent);
+      component = fixture.componentInstance;
+      obtenerUseCase = TestBed.inject(ObtenerProductosUseCase) as jasmine.SpyObj<ObtenerProductosUseCase>;
+      flush();
+      fixture.detectChanges();
+    }));
+
+    it('debe crear el componente', () => {
+      expect(component).toBeTruthy();
+      expect(obtenerUseCase.execute).toHaveBeenCalled();
     });
+
+    it('debe retornar un arreglo vacio', () => {
+      expect(obtenerUseCase.execute).toHaveBeenCalledWith({ busqueda: '' });
+      expect(component.productos.status()).toBe('success');
+      expect(component.datos()?.length).toBe(0);
+    });
+
     it('debe mostrar un mensaje de que no hay productos', () => {
-      productoService.obtener.and.returnValue(mockObservable([]));
-      productoService.buscar.and.returnValue(mockObservable([]))
       fixture.detectChanges();
 
-      expect(productoService.buscar).toHaveBeenCalledWith('');
       const debug = findByQuery(fixture, '.tabla--vacio');
       const mensaje = getElementTextByDebug(debug.query(By.css('span')));
       expect(mensaje).toContain("No existen");
     });
+  });
 
-    describe('y exista al menos 1', () => {
-      const productos = [producto];
-      beforeEach(() => {
-        productoService.obtener.and.returnValue(mockObservable(productos));
-        productoService.buscar.and.returnValue(mockObservable(productos));
-        fixture.detectChanges();
+  describe('Cuando se tenga al menos 1 producto', () => {
+    let fixture: ComponentFixture<TablaProductosComponent>;
+    const productos = [producto];
+
+    beforeEach(fakeAsync(async () => {
+      const obtenerUseCaseSpy = jasmine.createSpyObj('ObtenerProductosUseCase', ['execute']);
+      obtenerUseCaseSpy.execute.and.returnValue(() => crearQueryOptions<Array<Producto>>([undefined], productos));
+      TestBed.configureTestingModule({
+        providers: [
+          provideQueryClient(queryClient),
+          { provide: ObtenerProductosUseCase, useValue: obtenerUseCaseSpy },
+        ],
       });
+      fixture = TestBed.createComponent(TablaProductosComponent);
+      flush();
+      fixture.detectChanges();
+    }));
 
-      it('debe tener n cantidad de filas en la tabla', () => {
-        const debug = findAllByQuery(fixture, 'tbody tr');
-        expect(debug.length).toEqual(productos.length);
-      });
-
-      it('debe mostrar la informacion del producto', () => {
-        const producto = productos[0];
-        const debug = findByQuery(fixture, 'tbody tr');
-        const celdas = debug.queryAll(By.css("td"));
-        const imagen = celdas[0].query(By.css("img")).nativeElement as HTMLImageElement;
-        expect(imagen.src).toBe(producto.logo);
-        expect(celdas[1].nativeElement.textContent).toBe(producto.nombre);
-        expect(celdas[2].nativeElement.textContent).toBe(producto.descripcion);
-      })
+    it('debe tener n cantidad de filas en la tabla', () => {
+      const debug = findAllByQuery(fixture, 'tbody tr');
+      expect(debug.length).toEqual(productos.length);
     });
+
+    it('debe mostrar la informacion del producto', () => {
+      const producto = productos[0];
+      const debug = findByQuery(fixture, 'tbody tr');
+      const celdas = debug.queryAll(By.css("td"));
+      const imagen = celdas[0].query(By.css("img")).nativeElement as HTMLImageElement;
+      expect(imagen.src).toBe(producto.logo);
+      expect(celdas[1].nativeElement.textContent).toBe(producto.nombre);
+      expect(celdas[2].nativeElement.textContent).toBe(producto.descripcion);
+    })
   });
 });
+

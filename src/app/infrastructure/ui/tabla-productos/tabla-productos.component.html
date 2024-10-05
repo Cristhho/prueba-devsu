@@ -1,8 +1,8 @@
 <div class="tablaContenedor">
-  @if (cargando$ | async) {
+  @if (cargando()) {
     <app-progress-bar />
   }
-  @if (productos$ | async; as productos) {
+  @if (productos.status() === 'success') {
     <div [ngStyle]="{'overflow-x': 'auto'}">
       <table>
         <thead>
@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (producto of (productosFiltrados$ | async); track producto.id) {
+          @for (producto of datos(); track producto.id) {
             <tr>
               <td [ngStyle]="{textAlign: 'center'}"><img [ngSrc]="producto.logo" width="50" height="50"></td>
               <td>{{producto.nombre}}</td>
@@ -25,14 +25,13 @@
               <td>{{producto.fechaRevision | date: 'dd-MM-yyyy':'GMT'}}</td>
               <td><app-menu-container [producto]="producto" /></td>
             </tr>
+          } @empty {
+            <div class="tabla--vacio"><span>No existen productos</span></div>
           }
         </tbody>
       </table>
     </div>
-    @if (productosFiltrados$ | async; as resultados) {
-      @if (!resultados?.length) {
-        <div class="tabla--vacio"><span>No existen productos</span></div>
-      }
+    @if (datos(); as resultados) {
       <div class="tablaPie">
         {{resultados?.length}} resultado{{resultados?.length === 1 ? '' : 's'}}
       </div>
