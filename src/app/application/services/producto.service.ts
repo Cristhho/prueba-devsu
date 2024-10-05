@@ -40,30 +40,24 @@ export class ProductoService implements RepositorioBase<Producto> {
 
   guardar(datos: Producto): Observable<string> {
     const cuerpo = this.mapeo.modeloDto(datos);
-    this.mostarCarga();
     return this.http.post<RespuestaGuardarProducto>(this.url, cuerpo).pipe(
       map((respuesta) => respuesta.message ?? ''),
-      tap(this.mostrarToastExito.bind(this)),
-      finalize(() => this.esconderCarga())
+      tap(this.mostrarToastExito.bind(this))
     );
   }
 
   modificar(id: Producto['id'], datos: Partial<Omit<Producto, 'id'>>): Observable<string> {
     const cuerpo = this.mapeo.modeloDto(datos);
-    this.mostarCarga();
     return this.http.put<RespuestaGuardarProducto>(`${this.url}/${id}`, cuerpo).pipe(
       map((respuesta) => respuesta.message!),
-      tap(this.mostrarToastExito.bind(this)),
-      finalize(() => this.esconderCarga())
+      tap(this.mostrarToastExito.bind(this))
     );
   }
 
   eliminar(id: ID): Observable<string> {
-    this.mostarCarga();
     return this.http.delete<RespuestaBase<void>>(`${this.url}/${id}`).pipe(
       map((respuesta) => respuesta.message!),
-      tap(this.mostrarToastExito.bind(this)),
-      finalize(() => this.esconderCarga())
+      tap(this.mostrarToastExito.bind(this))
     )
   }
 

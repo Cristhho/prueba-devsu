@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
 
 import { BotonComponent } from "../boton/boton.component";
 import { FormularioService } from '@app/application/services/formulario.service';
-import { ProductoService } from '@app/application/services/producto.service';
+import { ActualizarProductoUseCase, GuardarProductoUseCase } from '@app/application/useCases';
 
 @Component({
   selector: 'app-form-botones',
@@ -16,8 +15,7 @@ import { ProductoService } from '@app/application/services/producto.service';
   templateUrl: './form-botones.component.html',
   styleUrl: './form-botones.component.css',
 })
-export class FormBotonesComponent implements OnDestroy {
-  suscripciones: Array<Subscription> = [];
+export class FormBotonesComponent {
   @Input()
   revision = '';
 
@@ -27,8 +25,8 @@ export class FormBotonesComponent implements OnDestroy {
   @Input({ required: false })
   id = '';
 
-  get cargando$() {
-    return this.productoService.cargando$;
+  get cargando() {
+    return this.editando ? this.actualizarUseCase.cargando() : this.guardarUseCase.cargando();
   }
 
   get formulario() {
@@ -37,12 +35,9 @@ export class FormBotonesComponent implements OnDestroy {
 
   constructor(
     private readonly formularioService: FormularioService,
-    private readonly productoService: ProductoService
+    private readonly guardarUseCase: GuardarProductoUseCase,
+    private readonly actualizarUseCase: ActualizarProductoUseCase,
   ) {}
-
-  ngOnDestroy(): void {
-    this.suscripciones.forEach((s) => s.unsubscribe);
-  }
 
   public reiniciarFormulario() {
     this.formulario.reset();
@@ -53,16 +48,10 @@ export class FormBotonesComponent implements OnDestroy {
       this.formulario.markAllAsTouched();
       return;
     }
-    if (this.editando) {
-
-    }
-    this.suscripciones.push(
-      this.productoService.guardar(this.formularioService.crearModelo(this.revision)).subscribe({
-        complete: () => {
-          this.reiniciarFormulario();
-        },
-      })
-    );
+    this.guardarUseCase.execute({
+      producto: this.formularioService.crearModelo(this.revision),
+      onSuccess: () => this.reiniciarFormulario()
+    });
   }
 
   public actualizar() {
@@ -70,10 +59,7 @@ export class FormBotonesComponent implements OnDestroy {
       this.formulario.markAllAsTouched();
       return;
     }
-    const {id, ...modelo} = this.formularioService.crearModelo(this.revision)
-    this.suscripciones.push(
-      this.productoService.modificar(this.id, modelo).subscribe()
-    );
+    this.actualizarUseCase.execute(this.formularioService.crearModelo(this.revision));
   }
 }
 

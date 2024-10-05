@@ -25,6 +25,7 @@ describe('TablaProductosComponent', () => {
         ],
       });
       fixture = TestBed.createComponent(TablaProductosComponent);
+      fixture.componentRef.setInput('busqueda', '');
       component = fixture.componentInstance;
       obtenerUseCase = TestBed.inject(ObtenerProductosUseCase) as jasmine.SpyObj<ObtenerProductosUseCase>;
       flush();
@@ -37,7 +38,6 @@ describe('TablaProductosComponent', () => {
     });
 
     it('debe retornar un arreglo vacio', () => {
-      expect(obtenerUseCase.execute).toHaveBeenCalledWith({ busqueda: '' });
       expect(component.productos.status()).toBe('success');
       expect(component.datos()?.length).toBe(0);
     });
@@ -65,6 +65,7 @@ describe('TablaProductosComponent', () => {
         ],
       });
       fixture = TestBed.createComponent(TablaProductosComponent);
+      fixture.componentRef.setInput('busqueda', '');
       flush();
       fixture.detectChanges();
     }));

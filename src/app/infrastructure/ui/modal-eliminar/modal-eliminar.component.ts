@@ -3,8 +3,8 @@ import { Component, Input } from '@angular/core';
 import { ModalService } from '@app/application/services/modal.service';
 import { BotonComponent } from '../boton/boton.component';
 import { ID } from '@app/domain';
-import { ProductoService } from '@app/application/services/producto.service';
 import { CommonModule } from '@angular/common';
+import { EliminarProductoUseCase } from '@app/application/useCases';
 
 @Component({
   selector: 'app-modal-eliminar',
@@ -23,13 +23,9 @@ export class ModalEliminarComponent {
   @Input()
   nombre: string = '';
 
-  get cargando$() {
-    return this.productoService.cargando$;
-  }
-
   constructor(
     private readonly modalService: ModalService,
-    private readonly productoService: ProductoService
+    public readonly eliminarUseCase: EliminarProductoUseCase
   ) { }
 
   public onClose() {
@@ -38,11 +34,9 @@ export class ModalEliminarComponent {
 
   public eliminar() {
     if (this.id) {
-      this.productoService.eliminar(this.id).subscribe({
-        complete: () => {
-          this.productoService.obtener().subscribe();
-          this.onClose();
-        }
+      this.eliminarUseCase.execute({
+        id: this.id,
+        onSuccess: () => this.onClose()
       });
     }
   }

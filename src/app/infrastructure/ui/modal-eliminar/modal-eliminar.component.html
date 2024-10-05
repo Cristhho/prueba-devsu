@@ -3,5 +3,5 @@
 </div>
 <div class="botones">
   <app-boton label="Cancelar" tipo="button" variante="secundario" (btnClick)="onClose()"/>
-  <app-boton label="Confirmar" [disabled]="(cargando$ | async) ?? false" (btnClick)="eliminar()"/>
+  <app-boton label="Confirmar" [disabled]="eliminarUseCase.cargando()" (btnClick)="eliminar()"/>
 </div>

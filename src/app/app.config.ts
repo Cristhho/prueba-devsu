@@ -14,7 +14,11 @@ export const appConfig: ApplicationConfig = {
       apiUrlInterceptor,
       apiErrorInterceptor
     ])),
-    provideAngularQuery(new QueryClient()),
+    provideAngularQuery(new QueryClient({
+      defaultOptions: {
+        queries: { refetchOnWindowFocus: false, }
+      }
+    })),
     MapeoProducto
   ]
 };

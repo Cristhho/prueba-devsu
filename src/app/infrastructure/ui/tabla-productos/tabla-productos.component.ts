@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { MenuContainerComponent } from "../menu-container/menu-container.component";
@@ -19,8 +19,7 @@ import { ObtenerProductosUseCase } from '@app/application/useCases';
   styleUrl: './tabla-productos.component.css'
 })
 export class TablaProductosComponent {
-  @Input({ required: true })
-  busqueda = '';
+  busqueda = input.required<string>();
 
   private readonly obtenerProductos = inject(ObtenerProductosUseCase);
   public productos = injectQuery(this.obtenerProductos.execute({ busqueda: this.busqueda }));
