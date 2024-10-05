@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, finalize, map, Observable, tap } from 'rxj
 
 import { MapeoProducto } from '../mapeadores/mapeo-producto';
 import { ID, Producto, RepositorioBase } from '@app/domain';
-import { RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app/domain/dto';
+import { ProductoDto, RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app/domain/dto';
 import { ToastService } from './toast.service';
 
 @Injectable({
@@ -66,19 +66,10 @@ export class ProductoService implements RepositorioBase<Producto> {
   }
 
   buscarPorId(id: ID) {
-    return this.obtener().pipe(
-      map((productos) => {
-        const producto = productos.find((p) => p.id === id);
-        if (!producto) throw new Error('Producto no existe');
-        else return producto;
+    return this.http.get<ProductoDto>(`${this.url}/${id}`).pipe(
+      map((respuesta) => {
+        return this.mapeo.dtoModelo(respuesta);
       }),
-      catchError((err: Error) => {
-        this.toast.add({
-          message: err.message,
-          type: 'error'
-        });
-        throw err;
-      })
     );
   }
 

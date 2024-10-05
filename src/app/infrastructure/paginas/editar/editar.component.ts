@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterContentChecked, ChangeDetectorRef, Component, effect, inject, Input, signal, ViewChild } from '@angular/core';
+import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { BotonAtrasComponent } from "../../ui/boton-atras/boton-atras.component";
 import { FormProductoComponent } from "../../ui/form-producto/form-producto.component";
 import { FormBotonesComponent } from "../../ui/form-botones/form-botones.component";
 import { FormularioService } from '@app/application/services/formulario.service';
-import { ProductoService } from '@app/application/services/producto.service';
-import { Observable, tap } from 'rxjs';
-import { Producto } from '@app/domain';
 import { FechasUtils } from '@app/utils/fechas';
+import { ProductoPorIdUseCase } from '@app/application/useCases';
 
 @Component({
   selector: 'app-editar',
@@ -23,47 +21,42 @@ import { FechasUtils } from '@app/utils/fechas';
   templateUrl: './editar.component.html',
   styleUrl: './editar.component.css',
 })
-export class EditarComponent implements OnInit, AfterContentChecked {
+export class EditarComponent implements AfterContentChecked {
   @ViewChild(FormProductoComponent)
   private formRef!: FormProductoComponent;
 
-  public producto$!: Observable<Producto>;
+  @Input({required: true})
+  set id(idProducto: string) {
+    this.idProducto.set(idProducto);
+  }
 
-  public id = '';
+  public idProducto = signal('');
+
+  private readonly obtenerProducto = inject(ProductoPorIdUseCase);
+  public productoQuery = injectQuery(this.obtenerProducto.execute({ id: this.idProducto }));
 
   get revision() {
     return this.formRef ? this.formRef.revision() : '';
   }
-
-  constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly changeDetector: ChangeDetectorRef,
-    private readonly formularioService: FormularioService,
-    private readonly productoService: ProductoService
-  ) {
-    this.formularioService.construirFormulario(true);
+  get datos() {
+    return this.productoQuery.data;
   }
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const id: string | null = params.get('id');
-      if (id) {
-        this.id = id;
-        this.producto$ = this.productoService.buscarPorId(id).pipe(
-          tap((producto) => {
-            this.formularioService.formulario.patchValue({
-              descripcion: producto.descripcion,
-              fechaLiberacion: FechasUtils.formatoInput(producto.fechaLiberacion),
-              id: producto.id as string,
-              logo: producto.logo,
-              nombre: producto.nombre
-            });
-          })
-        );
-      } else {
-        this.router.navigate(['/']);
-      }
+  constructor(
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly formularioService: FormularioService,
+  ) {
+    this.formularioService.construirFormulario(true);
+    effect(() => {
+      const producto = this.datos();
+      if (producto)
+        this.formularioService.formulario.patchValue({
+          descripcion: producto.descripcion,
+          fechaLiberacion: FechasUtils.formatoInput(producto.fechaLiberacion),
+          id: producto.id as string,
+          logo: producto.logo,
+          nombre: producto.nombre
+        });
     });
   }
 

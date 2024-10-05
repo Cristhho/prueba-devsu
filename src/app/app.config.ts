@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
-import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
+import { PreloadAllModules, provideRouter, withComponentInputBinding, withPreloading } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAngularQuery, QueryClient } from '@tanstack/angular-query-experimental';
 
@@ -9,7 +9,7 @@ import { MapeoProducto } from './application/mapeadores/mapeo-producto';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withPreloading(PreloadAllModules),),
+    provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding()),
     provideHttpClient(withInterceptors([
       apiUrlInterceptor,
       apiErrorInterceptor
