@@ -1,33 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, finalize, map, Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { MapeoProducto } from '../mapeadores/mapeo-producto';
 import { ID, Producto, RepositorioBase } from '@app/domain';
 import { ProductoDto, RespuestaBase, RespuestaGuardarProducto, RespuestaProducto } from '@app/domain/dto';
 import { ToastService } from './toast.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductoService implements RepositorioBase<Producto> {
-  private readonly url = '/bp/products';
-  private cargandoSubject = new BehaviorSubject<boolean>(false);
-  cargando$ = this.cargandoSubject.asObservable();
+  private readonly url = `${environment.apiUrl}/bp/products`;
 
   constructor(
     private readonly http: HttpClient,
     private readonly mapeo: MapeoProducto,
     private readonly toast: ToastService
   ) {}
-
-  mostarCarga() {
-    this.cargandoSubject.next(true);
-  }
-
-  esconderCarga() {
-    this.cargandoSubject.next(false);
-  }
 
   obtener(): Observable<Producto[]> {
     return this.http.get<RespuestaProducto>(this.url).pipe(

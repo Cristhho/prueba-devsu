@@ -66,13 +66,15 @@
               "buildTarget": "productos-bancarios:build:production"
             },
             "development": {
-              "buildTarget": "productos-bancarios:build:development"
+              "buildTarget": "productos-bancarios:build:development",
+              "proxyConfig": "proxy.config.json"
+            },
+            "development-docker": {
+              "buildTarget": "productos-bancarios:build:development",
+              "proxyConfig": "proxy.docker.config.json"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "proxyConfig": "proxy.config.json"
-          }
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
