@@ -5,9 +5,10 @@
     {
       "name": "ng serve",
       "type": "chrome",
-      "request": "launch",
+      "request": "attach",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/"
+      "port": 9222,
+      "urlFilter": "http://localhost:4200/*"
     },
     {
       "name": "ng test",
