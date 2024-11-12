@@ -5,21 +5,16 @@ WORKDIR /usr/src/app
 RUN npm install -g @angular/cli@17.1.1
 
 COPY package.json package-lock.json ./
-RUN npm ci
-
 COPY . .
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+RUN npm ci
+RUN ng build
 
-FROM builder as dev-envs
+FROM nginx:stable-alpine3.20-slim as dev-envs
 
-RUN apt-get update && \
-apt-get install -y --no-install-recommends git
+COPY --from=builder /usr/src/app/dist/productos-bancarios/browser /usr/share/nginx/html
 
-RUN useradd -s /bin/bash -m vscode && \
-groupadd docker && \
-usermod -aG docker vscode
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
+EXPOSE 80
 
-CMD ["ng", "serve", "--host", "0.0.0.0", "--configuration", "development-docker"]
+CMD ["nginx", "-g", "daemon off;"]
